@@ -1,0 +1,11 @@
+#!/bin/sh
+currentdir=`pwd`
+cd /boot/home/config/non-packaged/data/yab_work/BuildFactory
+BuildFactory.yab Bookmarker "$currentdir/Bookmarker.yab" application/x-vnd.fat-elk
+mv -T Bookmarker "$currentdir/ Bookmarker"
+cd $currentdir
+unzip -o bmattrs
+copyattr  bmattrs " Bookmarker"
+rm bmattrs
+unzip -o Bookmarks
+mv  -t Bookmarks " Bookmarker"

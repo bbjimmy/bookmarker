@@ -1,0 +1,6 @@
+#!/bin/sh
+settings=`finddir B_USER_SETTINGS_DIRECTORY`
+DeskBarMenu=`finddir B_USER_DESKBAR_DIRECTORY`
+copyattr -n BEOS:ICON  Bookmarks $settings/WebPositive/Bookmarks
+ln -sT $settings/WebPositive/Bookmarks $DeskBarMenu/Bookmarks
+copyattr -r -d Bookmarks/ $settings/WebPositive

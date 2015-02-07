@@ -1,0 +1,210 @@
+#!/boot/home/config/bin/yab
+
+doc Place a description of your
+doc program here.
+doc
+doc Author, date, license
+
+// set DEBUG = 1 to print out all messages on the console
+DEBUG = 1
+
+DeskBarMenu$=system$("finddir B_USER_DESKBAR_DIRECTORY")
+
+DeskBarMenu$ = trim$(DeskBarMenu$)
+
+
+r$="Radio1"
+
+OpenWindow()
+
+// Main Message Loop
+dim msg$(1)
+while(not leavingLoop)
+	nCommands = token(message$, msg$(), "|")
+	url$=textcontrol get$  "TextCtrl"
+	filename$=textcontrol get$  "TextCtrl1"
+	if url$<>"http://" then 
+	if filename$<> "" then
+	if left$(url$,7) ="http://" then
+	option set "saveButton", "Enabled",1
+	end if
+	else
+	option set "saveButton", "Enabled",0
+	endif
+	else
+	option set "saveButton", "Enabled",0
+	endif
+
+	for everyCommand = 1 to nCommands
+		if(DEBUG and msg$(everyCommand)<>"") print msg$(everyCommand)
+
+		switch(msg$(everyCommand))
+			case "Radio1"
+				r$="Radio1"
+					break
+			case "Radio2"
+				r$="Radio2"
+					break
+			case "Radio3"
+				r$="Radio3"
+					break
+			case "saveButton"
+				savebookmark()
+					break	
+			
+			
+			case "_QuitRequested":
+			case "MainWindow:_QuitRequested":
+				leavingLoop = true
+				break
+			default:
+				break
+		end switch
+
+	next everyCommand
+
+wend
+
+CloseWindow()
+
+end
+
+
+// Setup the main window here
+sub OpenWindow()
+	window open 100,100 to 600,500, "MainWindow", "Bookmarker"
+	window set "MainWindow", "Flags", "Not-Resizable, Not-Zoomable"
+
+	view 20,20 to 480,60, "Title", "MainWindow"
+draw set "bgcolor", 100,150,200, "Title"
+draw set "lowcolor", 100,150,200, "Title"
+draw set "highcolor", 255,255,255, "Title"
+if(peek$("os") = "Haiku") then
+	draw set "DejaVu Sans,Condensed Bold,32", "Title"
+else
+	draw set "Zurich,Bold,32", "Title"
+endif
+
+
+draw text 10,32, "     The Bookmark Maker", "Title"	
+boxview 20,90 to 480,290, "Boxview", "New Bookmark", 2, "MainWindow"
+draw set "bgcolor", 210,210,210, "Boxview"
+draw set "lowcolor", 50,50,200, "Boxview"
+draw set "highcolor", 255,255,255, "Boxview"
+
+textcontrol 20,15 to 420,60, "TextCtrl", "URL", "http://", "Boxview"
+tooltip "TextCtrl", "Enter the web address"
+
+
+textcontrol 20,55 to 420,60, "TextCtrl1", "Filename", "", "Boxview"
+tooltip "TextCtrl1", "Enter the filename for the Bookmark"
+
+textcontrol 20,95 to 420,60, "TextCtrl2", "Keywords", "", "Boxview"
+tooltip "TextCtrl2", "Enter keywords to use with Find"
+
+textcontrol 20,135 to 420,60, "TextCtrl3", "Title", "", "Boxview"
+tooltip "TextCtrl3", "Enter Title to use with Find"
+
+view 20, 300 to 480, 400, "saveview", "MainWindow"
+
+
+// radiobutton
+radiobutton 40,15, "Radio1", " Desktop", true, "saveview"
+tooltip "Radio1", "Save to the Desktop"
+radiobutton 40,35, "Radio2", " Bookmarks", false, "saveview"
+tooltip "Radio2", "Save to the Bookmarks folder"
+radiobutton 40,55, "Radio3", " Bookmark bar", false, "saveview"
+tooltip "Radio3", "Save to the Bookmark bar folder"
+button 200,35 to 400,55, "saveButton", "Save", "saveview"
+option set "saveButton", "Enabled",0 
+
+
+
+
+return
+end sub
+
+// Close down the main window
+sub CloseWindow()
+	window close "MainWindow"
+	return
+end sub
+
+//save the bookmark
+sub savebookmark()
+local tt$(10),kk$(10), fn$(10)
+
+
+	filename$=trim$(filename$)
+	num=token(filename$,fn$())
+	if num>1 then
+			filename$=""
+			for x=1 to num
+			filename$=filename$+fn$(x)+"\ "
+			next x
+		else
+		
+		end if
+	
+	
+	title$=textcontrol get$  "TextCtrl3"
+		title$=trim$(title$)
+		num=token(title$, tt$())
+		if num>1 then
+			title$=""
+			for x=1 to num
+			title$=title$+tt$(x)+"\ "
+			next x
+		else
+		
+		end if
+		
+		keyword$=textcontrol get$  "TextCtrl2"
+		
+		num=token(keyword$,kk$())
+		if num>1 then
+			keyword$=""
+			for x=1 to num
+			keyword$=keyword$+kk$(x)+"\ "
+			next x
+		else 
+		
+		end if
+		
+	if r$="Radio1" then
+		x=system("touch /boot/home/Desktop/"+filename$)
+		x=system("addattr -t mime BEOS:TYPE  application/x-vnd.Be-bookmark /boot/home/Desktop/"+filename$)
+		x=system("addattr META:url "+url$+" /boot/home/Desktop/"+filename$)
+		x=system("addattr META:title "+title$+" /boot/home/Desktop/"+filename$)
+		x=system("addattr META:keyw "+keyword$+" /boot/home/Desktop/"+filename$)
+		
+	end if	
+	
+	if r$="Radio2"  then
+		x=system("touch "+DeskBarMenu$+"/Bookmarks/"+filename$)
+		x=system("addattr -t mime BEOS:TYPE  application/x-vnd.Be-bookmark "+DeskBarMenu$+"/Bookmarks/"+filename$)
+		x=system("addattr META:url "+url$+" "+DeskBarMenu$+"/Bookmarks/"+filename$)
+		x=system("addattr META:title "+title$+" "+DeskBarMenu$+"/Bookmarks/"+filename$)
+		x=system("addattr META:keyw "+keyword$+" "+DeskBarMenu$+"/Bookmarks/"+filename$)
+		
+	end if	
+	
+	if r$="Radio3"  then
+		x=system("touch "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar/"+filename$)
+		if x=1 system("mkdir "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar"):system("touch "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar/"+filename$)
+		x=system("addattr -t mime BEOS:TYPE  application/x-vnd.Be-bookmark "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar/"+filename$)
+		x=system("addattr META:url "+url$+" "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar/"+filename$)
+		x=system("addattr META:title "+title$+" "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar/"+filename$)
+		x=system("addattr META:keyw "+keyword$+" "+DeskBarMenu$+"/Bookmarks/Bookmark\ bar/"+filename$)
+		
+	end if	
+	
+	
+	TEXTCONTROL SET "TextCtrl", "http://"
+	TEXTCONTROL CLEAR "TextCtrl1"
+	TEXTCONTROL CLEAR "TextCtrl2"
+	TEXTCONTROL CLEAR "TextCtrl3"
+	RADIOBUTTON SET "Radio1", 1
+	
+	return
+end sub
