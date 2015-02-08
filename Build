@@ -1,7 +1,7 @@
 #!/bin/sh
 currentdir=`pwd`
 cd /boot/home/config/non-packaged/data/yab_work/BuildFactory
-BuildFactory.yab Bookmarker "$currentdir/Bookmarker.yab" application/x-vnd.fat-elk
+BuildFactory.yab Bookmarker "$currentdir/Bookmarker.yab" application/x-vnd.Bookmarker
 mv -T Bookmarker "$currentdir/ Bookmarker"
 cd $currentdir
 unzip -o bmattrs

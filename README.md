@@ -5,21 +5,26 @@ Bookmarker
 by
 FAT ELK Software
 
-Bookmarker is a simple program to make and store bookmarks ( system wide links to web sites ) for the  Haiku Operating System.
+Bookmarker is a simple program to make and store bookmarks ( system wide links
+to web sites ) for the  Haiku Operating System.
 
 To Build: 
 yab-IDE must be installed in a PM version of Haiku.
 
-Open a Terminal and change to the directory you unzipped Bookmarker to and type "Build" 
+Open a Terminal and change to the directory you unzipped Bookmarker to and type:
 
-To install:  Open a Terminal and change to the directory you unzipped Bookmarker to and type "install" 
+Build 
+Then type:
+install 
 
 	Example:
 		cd /boot/home/Desktop/bookmarker
+		Build
 		install
 
 
-This will link WebPositive's Bookmarks folder to the Deskbar menu and add several Haiku bookmarks and the bookmarker program.
+This will link WebPositive's Bookmarks folder to the Deskbar menu and add 
+several Haiku bookmarks and the bookmarker program.
 
 Simply delete Bookmarker from the folder to un-install the software.
 
