@@ -9,7 +9,8 @@ Bookmarker is a simple program to make and store bookmarks ( system wide links
 to web sites ) for the  Haiku Operating System.
 
 To Build: 
-yab-IDE must be installed in a PM version of Haiku.
+yab-IDE 2.2.4 or higher must be installed in a recent PM version of Haiku.
+Requires resattr, a command line tool added recently to Haiku.
 
 Open a Terminal and change to the directory you unzipped Bookmarker to and type:
 

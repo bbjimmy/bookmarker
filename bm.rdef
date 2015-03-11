@@ -35,3 +35,4 @@ resource app_version {
 	long_info = "Bookmarker ©2011-2015 Jim Saxton, Fat Elk Software"
 };
 
+resource app_flags 0;

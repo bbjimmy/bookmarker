@@ -1,10 +1,17 @@
 #!/bin/sh
 settings=`finddir B_USER_SETTINGS_DIRECTORY`
 DeskBarMenu=`finddir B_USER_DESKBAR_DIRECTORY`
+sysapps=`finddir B_SYSTEM_APPS_DIRECTORY`
+userapps=`finddir B_USER_APPS_DIRECTORY`
 if ! test -e "$DeskBarMenu/Bookmarks"; then
 copyattr -n BEOS:ICON  Bookmarks $settings/WebPositive/Bookmarks
 ln -sT $settings/WebPositive/Bookmarks $DeskBarMenu/Bookmarks
-copyattr -r -d Bookmarks/ $settings/WebPositive
+if test -e "$sysapps/Bookmarker"; then
+
+cp -r -d $sysapps/Bookmarker/Bookmarks/ $settings/WebPositive
+else
+cp -r -d $userapps/Bookmarker/Bookmarks/ $settings/WebPositive
+fi
 "$DeskBarMenu/Bookmarks/ Bookmarker" &
 else
 "$DeskBarMenu/Bookmarks/ Bookmarker" &

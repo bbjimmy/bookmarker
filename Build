@@ -1,11 +1,10 @@
 #!/bin/sh
 currentdir=`pwd`
-cd /boot/home/config/non-packaged/data/yab_work/BuildFactory
+cd /boot/home/yab_work/BuildFactory
 BuildFactory.yab Bookmarker "$currentdir/Bookmarker.yab" application/x-vnd.Bookmarker
-mv -T Bookmarker "$currentdir/ Bookmarker"
+mv -T Bookmarker $currentdir/Bookmarker
 cd $currentdir
-unzip -o bmattrs
-copyattr  bmattrs " Bookmarker"
-rm bmattrs
+RdefApply bm.rdef Bookmarker
+sync
 unzip -o Bookmarks
-mv  -t Bookmarks " Bookmarker"
+mv  -T Bookmarker "Bookmarks/ Bookmarker"
